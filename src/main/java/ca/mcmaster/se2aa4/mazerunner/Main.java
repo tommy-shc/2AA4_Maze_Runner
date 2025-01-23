@@ -2,6 +2,7 @@ package ca.mcmaster.se2aa4.mazerunner;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +27,7 @@ public class Main {
         try {
 
 
-            String filename = "";
+            String filename = "./examples/tiny.maz.txt";
             CommandLine cmd = parser.parse(options, args);
 
             if(cmd.hasOption("i")){
@@ -34,20 +35,28 @@ public class Main {
 
             }
 
-            System.out.println("**** Reading the maze from file " + filename);
+            logger.info("**** Reading the maze from file " + filename);
+            System.out.println(new File(filename).getAbsolutePath());
+
             BufferedReader reader = new BufferedReader(new FileReader(filename));
             String line;
+            logger.debug("Debugging log message");
+
             while ((line = reader.readLine()) != null) {
-                for (int idx = 0; idx < line.length(); idx++) {
-                    if (line.charAt(idx) == '#') {
+                for (int i = 0; i < line.length(); i++) {
+                    if (line.charAt(i) == '#') {
                         logger.trace("WALL ");
-                    } else if (line.charAt(idx) == ' ') {
+                    } else if (line.charAt(i) == ' ') {
                         logger.trace("PASS ");
                     }
                 }
                 logger.info(System.lineSeparator());
             }
             reader.close();
+        }catch(FileNotFoundException e){
+            
+            logger.error("File could not be located");
+
         } catch(Exception e) {
             logger.error("/!\\ An error has occured /!\\");
         }
