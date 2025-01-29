@@ -69,7 +69,7 @@ public class Main {
                         maze.setValue(0, i, j);
                     } else if (line.charAt(j) == ' ') {
                         //logger.trace("PASS ");
-                        if((i == 0) || (i == numOfColumns)){
+                        if((j == 0) || (j == numOfColumns-1)){
                             maze.setValue(2, i, j);
                         }else{
                             maze.setValue(1, i, j);
@@ -96,15 +96,5 @@ public class Main {
         logger.trace("**** Computing path");
         logger.info("PATH NOT COMPUTED");
         logger.trace("** End of MazeRunner");
-    }
-
-    public static String findPath(int[][] maze,int row,int col,String path){
-
-        while(maze[row][col] != 2){
-            path+="F";
-            col += 1;
-        }
-
-        return path;
     }
 }
