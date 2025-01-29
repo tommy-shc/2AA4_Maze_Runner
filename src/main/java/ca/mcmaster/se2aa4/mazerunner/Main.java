@@ -24,8 +24,8 @@ public class Main {
 
         CommandLineParser parser = new DefaultParser();
 
-        int[][] maze = new int[5][5];
-
+        Maze maze;
+        
         try {
 
 
@@ -34,50 +34,57 @@ public class Main {
 
             if(cmd.hasOption("i")){
                 filename = cmd.getOptionValue("i");
-
             }
 
             logger.info("**** Reading the maze from file " + filename);
             System.out.println(new File(filename).getAbsolutePath());
 
             BufferedReader reader = new BufferedReader(new FileReader(filename));
+            BufferedReader readerTwo = new BufferedReader(new FileReader(filename));
             String line;
-            logger.debug("Debugging log message");
 
-            int counter = 0;
-            //int prevLineLength = 0;
+            //Initialize variables for file reading
+            int numOfRows = 0;
+            int numOfColumns = 0;
+            
+            //Initial read to calculate maze size
+            while ((line = readerTwo.readLine()) != null) {
+                numOfColumns = 0;
+                for (int i=0;i<line.length();i++){
+                    numOfColumns++;
+                }
+                numOfRows++;
 
-            while ((line = reader.readLine()) != null) {
+            }
 
-                for (int i = 0; i < line.length(); i++) {
+            maze = new Maze(numOfRows, numOfColumns);
+
+            //Second read to get maze data
+            for (int i=0;i<numOfRows;i++){
+                line = reader.readLine();
+                for(int j=0;j<numOfColumns;j++){
 
                     if (line.charAt(i) == '#') {
                         logger.trace("WALL ");
-                        maze[counter][i] = 0;
+                        maze.setValue(0, i, j);
                     } else if (line.charAt(i) == ' ') {
                         logger.trace("PASS ");
-                        if((i == 0) || (i == 4)){
-                            maze[counter][i] = 2;
+                        if((i == 0) || (i == numOfColumns)){
+                            maze.setValue(2, i, j);
                         }else{
-                            maze[counter][i] = 1;
+                            maze.setValue(1, i, j);
                         }
                     }
                 }
 
-                if(line.length() == 0){
-                    for(int i=0;i<5;i++){
-                        if(i == 4){
-                            maze[counter][i] = 2;
-                        }else{
-                            maze[counter][i] = 1;
-                        }
-                    }
-                }
+                //Account for full empty line
 
-                counter++;
-                logger.info(System.lineSeparator());
             }
+
+            maze.displayMaze();
+
             reader.close();
+            readerTwo.close();
         }catch(FileNotFoundException e){
             
             logger.error("File could not be located");
@@ -85,17 +92,6 @@ public class Main {
         } catch(Exception e) {
             logger.error("/!\\ An error has occured /!\\");
         }
-
-        System.out.println(findPath(maze, 2, 0,""));
-
-        //Print Maze
-        for(int i=0;i<5;i++){
-            for(int j=0;j<5;j++){
-                System.out.print(maze[i][j]);
-            }
-            System.out.println();
-        }
-
 
         logger.trace("**** Computing path");
         logger.info("PATH NOT COMPUTED");
