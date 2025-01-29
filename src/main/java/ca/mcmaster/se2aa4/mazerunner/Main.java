@@ -29,7 +29,7 @@ public class Main {
         try {
 
 
-            String filename = "./examples/straight.maz.txt";
+            String filename = "./examples/tiny.maz.txt";
             CommandLine cmd = parser.parse(options, args);
 
             if(cmd.hasOption("i")){
@@ -64,11 +64,11 @@ public class Main {
                 line = reader.readLine();
                 for(int j=0;j<numOfColumns;j++){
 
-                    if (line.charAt(i) == '#') {
-                        logger.trace("WALL ");
+                    if (line.charAt(j) == '#') {
+                        //logger.trace("WALL ");
                         maze.setValue(0, i, j);
-                    } else if (line.charAt(i) == ' ') {
-                        logger.trace("PASS ");
+                    } else if (line.charAt(j) == ' ') {
+                        //logger.trace("PASS ");
                         if((i == 0) || (i == numOfColumns)){
                             maze.setValue(2, i, j);
                         }else{
