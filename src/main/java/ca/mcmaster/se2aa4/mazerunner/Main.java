@@ -82,6 +82,7 @@ public class Main {
             }
 
             maze.displayMaze();
+            System.out.println(maze.findPathRHR());
 
             reader.close();
             readerTwo.close();
