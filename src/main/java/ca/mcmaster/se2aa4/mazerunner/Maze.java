@@ -120,14 +120,14 @@ public class Maze {
                 return findPathRHRHelper(x,y-1,"W",path+"F");
             //Move Left
             }else if(isValidMove(x+1,y)){
-                return findPathRHRHelper(x,y+1,"S",path+" L F");
+                return findPathRHRHelper(x+1,y,"S",path+" L F");
             //Move Backward
             }else if(isValidMove(x,y+1)){
                 return findPathRHRHelper(x,y+1,"E",path+" RR F");
             }
         }else if(facingDirection.equals("N")){
             //Move right
-            if(isValidMove(x,y-1)){
+            if(isValidMove(x,y+1)){
                 return findPathRHRHelper(x,y+1,"E",path+" R F");
             //Move Forward
             }else if(isValidMove(x-1,y)){

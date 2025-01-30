@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.text.ParseException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.commons.cli.CommandLineParser;
@@ -28,7 +31,7 @@ public class Main {
         
         try {
 
-            String filename = "./examples/tiny.maz.txt";
+            String filename = "./examples/small.maz.txt";
             CommandLine cmd = parser.parse(options, args);
 
             if(cmd.hasOption("i")){
@@ -53,51 +56,88 @@ public class Main {
                     numOfColumns++;
                 }
                 numOfRows++;
-
             }
 
             maze = new Maze(numOfRows, numOfColumns);
-
+            logger.info("**** Second Read");
+            logger.info(numOfRows);
+            logger.info(numOfColumns);
             //Second read to get maze data
             for (int i=0;i<numOfRows;i++){
+                logger.info("read: " + i);
                 line = reader.readLine();
-                for(int j=0;j<numOfColumns;j++){
-
-                    if (line.charAt(j) == '#') {
-                        //logger.trace("WALL ");
-                        maze.setValue(0, i, j);
-                    } else if (line.charAt(j) == ' ') {
-                        //logger.trace("PASS ");
+                if(line.equals("")){
+                    for(int j=0;j<numOfColumns;j++){
                         if((j == 0) || (j == numOfColumns-1)){
                             maze.setValue(2, i, j);
                         }else{
                             maze.setValue(1, i, j);
                         }
                     }
+                }else if(line.length() < numOfColumns){
+                    for(int j=0;j<numOfColumns;j++){
+                        if(j<line.length()){
+                            if (line.charAt(j) == '#') {
+                                //logger.trace("WALL ");
+                                maze.setValue(0, i, j);
+                            } else if (line.charAt(j) == ' ') {
+                                //logger.trace("PASS ");
+                                if((j == 0) || (j == numOfColumns-1)){
+                                    maze.setValue(2, i, j);
+                                }else{
+                                    maze.setValue(1, i, j);
+                                }
+                            }
+                        }else{
+                            if((j == 0) || (j == numOfColumns-1)){
+                                maze.setValue(2, i, j);
+                            }else{
+                                maze.setValue(1, i, j);
+                            }
+                        }
+                    }
+                }else{
+                    for(int j=0;j<numOfColumns;j++){
+                        System.out.print(j + " ");
+                        if (line.charAt(j) == '#') {
+                            //logger.trace("WALL ");
+                            maze.setValue(0, i, j);
+                        } else if (line.charAt(j) == ' ') {
+                            //logger.trace("PASS ");
+                            if((j == 0) || (j == numOfColumns-1)){
+                                maze.setValue(2, i, j);
+                            }else{
+                                maze.setValue(1, i, j);
+                            }
+                        }
+                    }
                 }
-
-                //Account for full empty line
-
             }
 
-            maze.displayMaze();
+            logger.info("**** Displaying Path");
+            //maze.displayMaze();
 
+            logger.trace("**** Computing path");
             String path = maze.findPathRHR();
-            System.out.println(path);
+            //System.out.println(path);
             System.out.println(maze.getFactorizedForm(path));
 
             reader.close();
             readerTwo.close();
         }catch(FileNotFoundException e){
-            
+
+            logger.info("PATH NOT COMPUTED");
             logger.error("File could not be located");
 
+        } catch(IOException e) {
+            logger.info("PATH NOT COMPUTED");
+            logger.error("IOexception");
+
         } catch(Exception e) {
-            logger.error("/!\\ An error has occured /!\\");
+            logger.info("PATH NOT COMPUTED");
+            logger.error("Error");
         }
 
-        logger.trace("**** Computing path");
-        logger.info("PATH NOT COMPUTED");
         logger.trace("** End of MazeRunner");
     }
 }
