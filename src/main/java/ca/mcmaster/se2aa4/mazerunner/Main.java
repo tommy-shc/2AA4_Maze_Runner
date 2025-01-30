@@ -28,7 +28,6 @@ public class Main {
         
         try {
 
-
             String filename = "./examples/tiny.maz.txt";
             CommandLine cmd = parser.parse(options, args);
 
@@ -82,7 +81,10 @@ public class Main {
             }
 
             maze.displayMaze();
-            System.out.println(maze.findPathRHR());
+
+            String path = maze.findPathRHR();
+            System.out.println(path);
+            System.out.println(maze.getFactorizedForm(path));
 
             reader.close();
             readerTwo.close();

@@ -40,18 +40,45 @@ public class Maze {
                 break;
             }
         }
-        String path = "Path -> ";
-        path = findPathRHRHelper(entryPoint,1,"E",path);
-        return path;
+        return findPathRHRHelper(entryPoint,0,"E","");
+
 
     }
 
-    private String findPathRHRHelper(int x,int y,String facingDirection,String path){
+    public String getFactorizedForm(String path){
 
-        System.out.println(path);
+        char lastChar = 'Z';
+        String newPath = "";
+        int counter = 1;
+
+        for(int i=0;i<path.length();i++){
+            if(lastChar != 'Z'){
+
+                if(lastChar == path.charAt(i)){
+                    counter++;
+                }
+
+            }
+
+            if(path.charAt(i)==' '){
+                if(counter == 1){
+                    newPath += lastChar + " ";
+                }else{
+                    newPath += counter+""+lastChar + " ";
+                }
+                counter = 1;
+            }
+
+            lastChar = path.charAt(i);
+        }
+
+        return newPath;
+    }
+
+    private String findPathRHRHelper(int x,int y,String facingDirection,String path){
         
         if(maze[x][y] == 2){
-            return path;
+            return path + " ";
         }
 
         //Which direction currently facing
@@ -59,58 +86,58 @@ public class Maze {
         if(facingDirection.equals("E")){
             //Move right
             if(isValidMove(x+1,y)){
-                return findPathRHRHelper(x+1,y,"S",path+"R");
+                return findPathRHRHelper(x+1,y,"S",path+"R F");
             //Move Forward
             }else if(isValidMove(x,y+1)){
                 return findPathRHRHelper(x,y+1,"E",path+"F");
             //Move Left
             }else if(isValidMove(x-1,y)){
-                return findPathRHRHelper(x-1,y,"N",path+"L");
+                return findPathRHRHelper(x-1,y,"N",path+" L F");
             //Move Backward
             }else if(isValidMove(x,y-1)){
-                return findPathRHRHelper(x,y-1,"W",path+"B");
+                return findPathRHRHelper(x,y-1,"W",path+" RR F");
             }
         }else if(facingDirection.equals("S")){
             //Move right
             if(isValidMove(x,y-1)){
-                return findPathRHRHelper(x,y-1,"W",path+"R");
+                return findPathRHRHelper(x,y-1,"W",path+" R F");
             //Move Forward
             }else if(isValidMove(x+1,y)){
                 return findPathRHRHelper(x+1,y,"S",path+"F");
             //Move Left
             }else if(isValidMove(x,y+1)){
-                return findPathRHRHelper(x,y+1,"E",path+"L");
+                return findPathRHRHelper(x,y+1,"E",path+" L F");
             //Move Backward
             }else if(isValidMove(x-1,y)){
-                return findPathRHRHelper(x-1,y,"W",path+"B");
+                return findPathRHRHelper(x-1,y,"W",path+" RR F");
             }
         }else if(facingDirection.equals("W")){
             //Move right
             if(isValidMove(x-1,y)){
-                return findPathRHRHelper(x-1,y,"N",path+"R");
+                return findPathRHRHelper(x-1,y,"N",path+" R F");
             //Move Forward
             }else if(isValidMove(x,y-1)){
                 return findPathRHRHelper(x,y-1,"W",path+"F");
             //Move Left
             }else if(isValidMove(x+1,y)){
-                return findPathRHRHelper(x,y+1,"S",path+"L");
+                return findPathRHRHelper(x,y+1,"S",path+" L F");
             //Move Backward
             }else if(isValidMove(x,y+1)){
-                return findPathRHRHelper(x,y+1,"E",path+"B");
+                return findPathRHRHelper(x,y+1,"E",path+" RR F");
             }
         }else if(facingDirection.equals("N")){
             //Move right
             if(isValidMove(x,y-1)){
-                return findPathRHRHelper(x,y+1,"E",path+"R");
+                return findPathRHRHelper(x,y+1,"E",path+" R F");
             //Move Forward
             }else if(isValidMove(x-1,y)){
                 return findPathRHRHelper(x-1,y,"N",path+"F");
             //Move Left
             }else if(isValidMove(x,y-1)){
-                return findPathRHRHelper(x,y-1,"W",path+"L");
+                return findPathRHRHelper(x,y-1,"W",path+" L F");
             //Move Backward
             }else if(isValidMove(x+1,y)){
-                return findPathRHRHelper(x+1,y,"S",path+"B");
+                return findPathRHRHelper(x+1,y,"S",path+" RR F");
             }
         }
 
