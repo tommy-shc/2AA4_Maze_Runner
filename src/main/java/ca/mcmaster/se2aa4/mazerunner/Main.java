@@ -113,10 +113,9 @@ public class Main {
                 }
     
                 logger.info("**** Displaying Path");
-                //maze.displayMaze();
+                maze.displayMaze();
     
                 if(!cmd.hasOption("p")){
-                    System.out.println("Lol");
                     logger.trace("**** Computing path");
                     String path = maze.findPathRHR();
                     System.out.println(maze.getFactorizedForm(path));

@@ -116,6 +116,8 @@ public class Maze {
                 break;
             }
         }
+
+        System.out.println(entryPoint);
         return findPathRHRHelper(entryPoint,0,"E","");
     }
 
@@ -156,6 +158,7 @@ public class Maze {
         }
 
         //Which direction currently facing
+
 
         if(facingDirection.equals("E")){
             //Move right
@@ -220,15 +223,16 @@ public class Maze {
     }
 
     private Boolean isValidMove(int x,int y){
-        try{
-            if(maze[x][y] > 0){
-                return true;
-            }
-        }catch(Exception e){
+
+        if(x < 0 || x > numOfRows || y < 0 || y > numOfColumns){
             return false;
         }
 
-        return false;
+        if(maze[x][y] == 0){
+            return false;
+        }
+
+        return true;
     }
     
 }
