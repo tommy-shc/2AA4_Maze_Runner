@@ -29,6 +29,82 @@ public class Maze {
         }
     }
 
+    public boolean verifyPath(String path){
+
+        String[] components = path.split(" ");
+        int count;
+        String move;
+        String currentDir = "E";
+        int currentX = 0;
+        int currentY = 0;
+        //Find West Entry location
+        for(int i = 0;i<numOfRows;i++){
+            if(maze[i][0] == 2){
+                currentX = i;
+                maze[i][0] = 0;
+                break;
+            }
+        }
+
+
+        for(String component:components){
+
+            if(component.isEmpty()){
+                continue;
+            }
+
+            count = 1;
+            if(component.length() > 1 && component.charAt(0) > 48 && component.charAt(0) < 58) {
+
+                count = Integer.parseInt(component.substring(0, 1));
+                move = component.substring(1);
+            }else{
+                //Single move
+                move = component;
+            }
+            //Convert a left move to 3 right moves
+            if(move.equals("L")){
+                count = 3;
+                move = "R";
+            }
+            //Execute the move 'count' times
+            for (int i = 0; i < count; i++) {
+                //Move
+                if(move.equals("F")){
+                    if(currentDir.equals("E")){
+                        currentY += 1;
+                    }else if(currentDir.equals("S")){
+                        currentX += 1;
+                    }else if(currentDir.equals("W")){
+                        currentY -= 1;
+                    }else if(currentDir.equals("N")){
+                        currentY -= 1;
+                    }
+                
+                ///Change Direction
+                }else{
+                    if(currentDir.equals("E")){
+                        currentDir = "S";
+                    }else if(currentDir.equals("S")){
+                        currentDir = "W";
+                    }else if(currentDir.equals("W")){
+                        currentDir = "N";
+                    }else if(currentDir.equals("N")){
+                        currentDir = "E";
+                    }
+                }
+            }
+
+        }
+
+        if(maze[currentX][currentY] == 2){
+            return true;
+        }
+
+        return false;
+    }
+
+
     //Right hand rule implementation
     public String findPathRHR(){
         int entryPoint = 0;
@@ -41,9 +117,8 @@ public class Maze {
             }
         }
         return findPathRHRHelper(entryPoint,0,"E","");
-
-
     }
+
 
     public String getFactorizedForm(String path){
 
@@ -71,7 +146,6 @@ public class Maze {
 
             lastChar = path.charAt(i);
         }
-
         return newPath;
     }
 
