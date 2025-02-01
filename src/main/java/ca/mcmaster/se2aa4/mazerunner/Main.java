@@ -38,7 +38,7 @@ public class Main {
                 filename = cmd.getOptionValue("i");
 
                 logger.info("**** Reading the maze from file " + filename);
-                System.out.println(new File(filename).getAbsolutePath());
+                //System.out.println(new File(filename).getAbsolutePath());
 
                 // Initialize readers for the maze file
                 BufferedReader reader = new BufferedReader(new FileReader(filename));
