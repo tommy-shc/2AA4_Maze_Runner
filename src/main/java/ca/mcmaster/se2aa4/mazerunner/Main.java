@@ -13,136 +13,140 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.CommandLine;
 
-
 public class Main {
 
+    // Logger for tracking application events
     private static final Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) {
         logger.info("** Starting Maze Runner");
 
+        // Define command-line options
         Options options = new Options();
-        options.addOption("i","input",true,"Path to the maze file");
-        options.addOption("p","input",true,"Path to solve the maze");
-
+        options.addOption("i", "input", true, "Path to the maze file");
+        options.addOption("p", "input", true, "Path to solve the maze");
 
         CommandLineParser parser = new DefaultParser();
-
         Maze maze;
-        
-        try {
 
+        try {
+            // Default maze file path
             String filename = "./examples/straight.maz.txt";
             CommandLine cmd = parser.parse(options, args);
 
-            if(cmd.hasOption("i")){
+            if (cmd.hasOption("i")) {
                 filename = cmd.getOptionValue("i");
 
                 logger.info("**** Reading the maze from file " + filename);
                 System.out.println(new File(filename).getAbsolutePath());
-    
+
+                // Initialize readers for the maze file
                 BufferedReader reader = new BufferedReader(new FileReader(filename));
                 BufferedReader readerTwo = new BufferedReader(new FileReader(filename));
                 String line;
-    
-                //Initialize variables for file reading
+
+                // Initialize variables to store maze dimensions
                 int numOfRows = 0;
                 int numOfColumns = 0;
-                
-                //Initial read to calculate maze size
+
+                // First pass: Calculate maze dimensions
                 while ((line = readerTwo.readLine()) != null) {
                     numOfColumns = 0;
-                    for (int i=0;i<line.length();i++){
+                    for (int i = 0; i < line.length(); i++) {
                         numOfColumns++;
                     }
                     numOfRows++;
                 }
-    
+
+                // Initialize maze with calculated dimensions
                 maze = new Maze(numOfRows, numOfColumns);
                 logger.info("**** Second Read");
                 logger.info(numOfRows);
                 logger.info(numOfColumns);
-                //Second read to get maze data
-                for (int i=0;i<numOfRows;i++){
+
+                // Second pass: Populate maze data
+                for (int i = 0; i < numOfRows; i++) {
                     line = reader.readLine();
-                    if(line.equals("")){
-                        for(int j=0;j<numOfColumns;j++){
-                            if((j == 0) || (j == numOfColumns-1)){
-                                maze.setValue(2, i, j);
-                            }else{
-                                maze.setValue(1, i, j);
+                    if (line.equals("")) {
+                        // Handle empty lines
+                        for (int j = 0; j < numOfColumns; j++) {
+                            if ((j == 0) || (j == numOfColumns - 1)) {
+                                maze.setValue(2, i, j); // Mark as boundary
+                            } else {
+                                maze.setValue(1, i, j); // Mark as passable
                             }
                         }
-                    }else if(line.length() < numOfColumns){
-                        for(int j=0;j<numOfColumns;j++){
-                            if(j<line.length()){
+                    } else if (line.length() < numOfColumns) {
+                        // Handle lines shorter than expected
+                        for (int j = 0; j < numOfColumns; j++) {
+                            if (j < line.length()) {
                                 if (line.charAt(j) == '#') {
-                                    //logger.trace("WALL ");
-                                    maze.setValue(0, i, j);
+                                    maze.setValue(0, i, j); // Mark as wall
                                 } else if (line.charAt(j) == ' ') {
-                                    //logger.trace("PASS ");
-                                    if((j == 0) || (j == numOfColumns-1)){
-                                        maze.setValue(2, i, j);
-                                    }else{
-                                        maze.setValue(1, i, j);
+                                    if ((j == 0) || (j == numOfColumns - 1)) {
+                                        maze.setValue(2, i, j); // Mark as boundary
+                                    } else {
+                                        maze.setValue(1, i, j); // Mark as passable
                                     }
                                 }
-                            }else{
-                                if((j == 0) || (j == numOfColumns-1)){
-                                    maze.setValue(2, i, j);
-                                }else{
-                                    maze.setValue(1, i, j);
+                            } else {
+                                if ((j == 0) || (j == numOfColumns - 1)) {
+                                    maze.setValue(2, i, j); // Mark as boundary
+                                } else {
+                                    maze.setValue(1, i, j); // Mark as passable
                                 }
                             }
                         }
-                    }else{
-                        for(int j=0;j<numOfColumns;j++){
+                    } else {
+                        // Handle lines of expected length
+                        for (int j = 0; j < numOfColumns; j++) {
                             if (line.charAt(j) == '#') {
-                                //logger.trace("WALL ");
-                                maze.setValue(0, i, j);
+                                maze.setValue(0, i, j); // Mark as wall
                             } else if (line.charAt(j) == ' ') {
-                                //logger.trace("PASS ");
-                                if((j == 0) || (j == numOfColumns-1)){
-                                    maze.setValue(2, i, j);
-                                }else{
-                                    maze.setValue(1, i, j);
+                                if ((j == 0) || (j == numOfColumns - 1)) {
+                                    maze.setValue(2, i, j); // Mark as boundary
+                                } else {
+                                    maze.setValue(1, i, j); // Mark as passable
                                 }
                             }
                         }
-                    }
-                }
-    
-                logger.info("**** Displaying Path");
-                maze.displayMaze();
-    
-                if(!cmd.hasOption("p")){
-                    logger.trace("**** Computing path");
-                    String path = maze.findPathRHR();
-                    System.out.println(maze.getFactorizedForm(path));
-                }else{
-                    logger.trace("**** Verifying Path");
-                    if(maze.verifyPath(cmd.getOptionValue("p"))){
-                        System.out.println("correct path");
-                    }else{
-                        System.out.println("inccorrect path");
                     }
                 }
 
-    
+                logger.info("**** Displaying Path");
+                //maze.displayMaze();
+
+                // Handle path computation or verification based on command-line options
+                if (!cmd.hasOption("p")) {
+                    logger.trace("**** Computing path");
+                    String path = maze.findPathRHR(); // Compute path using Right-Hand Rule
+                    System.out.println(maze.getFactorizedForm(path)); // Display factorized path
+                } else {
+                    logger.trace("**** Verifying Path");
+                    if (maze.verifyPath(cmd.getOptionValue("p"))) {
+                        System.out.println("correct path");
+                    } else {
+                        System.out.println("incorrect path");
+                    }
+                }
+
+                // Close file readers
                 reader.close();
                 readerTwo.close();
             }
 
-        }catch(FileNotFoundException e){
-
+        } catch (FileNotFoundException e) {
+            // Handle file not found exception
             logger.info("PATH NOT COMPUTED");
             logger.error("File could not be located");
 
-        } catch(IOException e) {
+        } catch (IOException e) {
+            // Handle IO exceptions
             logger.info("PATH NOT COMPUTED");
             logger.error("IOexception");
 
-        } catch(Exception e) {
+        } catch (Exception e) {
+            // Handle generic exceptions
             logger.info("PATH NOT COMPUTED");
             logger.error("Error");
         }
