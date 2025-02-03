@@ -59,7 +59,7 @@ public class Main {
                 }
 
                 // Initialize maze with calculated dimensions
-                maze = new Maze(numOfRows, numOfColumns);
+                int[][] tempMaze = new int[numOfRows][numOfColumns];
                 logger.info("**** Second Read");
                 logger.info(numOfRows);
                 logger.info(numOfColumns);
@@ -71,9 +71,9 @@ public class Main {
                         // Handle empty lines
                         for (int j = 0; j < numOfColumns; j++) {
                             if ((j == 0) || (j == numOfColumns - 1)) {
-                                maze.setValue(2, i, j); // Mark as boundary
+                                tempMaze[i][j] = 2; // Mark as boundary
                             } else {
-                                maze.setValue(1, i, j); // Mark as passable
+                                tempMaze[i][j] = 1; // Mark as passable
                             }
                         }
                     } else if (line.length() < numOfColumns) {
@@ -81,19 +81,19 @@ public class Main {
                         for (int j = 0; j < numOfColumns; j++) {
                             if (j < line.length()) {
                                 if (line.charAt(j) == '#') {
-                                    maze.setValue(0, i, j); // Mark as wall
+                                    tempMaze[i][j] = 0; // Mark as wall
                                 } else if (line.charAt(j) == ' ') {
                                     if ((j == 0) || (j == numOfColumns - 1)) {
-                                        maze.setValue(2, i, j); // Mark as boundary
+                                        tempMaze[i][j] = 2; // Mark as boundary
                                     } else {
-                                        maze.setValue(1, i, j); // Mark as passable
+                                        tempMaze[i][j] = 1; // Mark as passable
                                     }
                                 }
                             } else {
                                 if ((j == 0) || (j == numOfColumns - 1)) {
-                                    maze.setValue(2, i, j); // Mark as boundary
+                                    tempMaze[i][j] = 2; // Mark as boundary
                                 } else {
-                                    maze.setValue(1, i, j); // Mark as passable
+                                    tempMaze[i][j] = 1; // Mark as passable
                                 }
                             }
                         }
@@ -101,17 +101,20 @@ public class Main {
                         // Handle lines of expected length
                         for (int j = 0; j < numOfColumns; j++) {
                             if (line.charAt(j) == '#') {
-                                maze.setValue(0, i, j); // Mark as wall
+                                tempMaze[i][j] = 0; // Mark as wall
                             } else if (line.charAt(j) == ' ') {
                                 if ((j == 0) || (j == numOfColumns - 1)) {
-                                    maze.setValue(2, i, j); // Mark as boundary
+                                    tempMaze[i][j] = 2; // Mark as boundary
                                 } else {
-                                    maze.setValue(1, i, j); // Mark as passable
+                                    tempMaze[i][j] = 1; // Mark as passable
                                 }
                             }
                         }
                     }
                 }
+
+                maze = new Maze(tempMaze,numOfRows, numOfColumns);
+
 
                 logger.info("**** Displaying Path");
                 //maze.displayMaze();
@@ -119,11 +122,13 @@ public class Main {
                 // Handle path computation or verification based on command-line options
                 if (!cmd.hasOption("p")) {
                     logger.trace("**** Computing path");
-                    String path = maze.findPathRHR(); // Compute path using Right-Hand Rule
-                    System.out.println(maze.getFactorizedForm(path)); // Display factorized path
+                    MazeSolver mazeSolver = new MazeSolver(maze);
+                    String path = mazeSolver.findPathRHR(); // Compute path using Right-Hand Rule
+                    System.out.println(mazeSolver.getFactorizedForm(path)); // Display factorized path
                 } else {
                     logger.trace("**** Verifying Path");
-                    if (maze.verifyPath(cmd.getOptionValue("p"))) {
+                    MazeVerifer mazeVerifer = new MazeVerifer(maze);
+                    if (mazeVerifer.verifyPath(cmd.getOptionValue("p"))) {
                         System.out.println("correct path");
                     } else {
                         System.out.println("incorrect path");
