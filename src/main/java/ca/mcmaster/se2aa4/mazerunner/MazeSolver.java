@@ -1,10 +1,10 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-class MazeSolver{
+public class MazeSolver{
 
     private Maze maze;
 
-    MazeSolver(Maze maze){
+    public MazeSolver(Maze maze){
         this.maze = maze;
     }
     // Find a path through the maze using the Right-Hand Rule

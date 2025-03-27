@@ -1,10 +1,10 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-class MazeVerifer{
+public class MazeVerifier{
 
     private Maze maze;
 
-    MazeVerifer(Maze maze){
+    MazeVerifier(Maze maze){
         this.maze = maze;
     }
     public boolean verifyPath(String path) {
