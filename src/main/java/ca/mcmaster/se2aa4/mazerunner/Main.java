@@ -113,7 +113,7 @@ public class Main {
                 }
 
                 maze = new Maze(tempMaze,numOfRows, numOfColumns);
-
+                maze.displayMaze();
 
                 logger.info("**** Displaying Path");
                 //maze.displayMaze();

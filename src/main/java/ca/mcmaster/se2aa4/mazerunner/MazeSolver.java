@@ -48,88 +48,95 @@ public class MazeSolver{
         int x = currentX;
         int y = currentY;
 
-        // Traverse the maze until the exit is found
-        while (maze.getValue(x, y) != 2) {
-            if (facingDirection.equals("E")) {
-                // Try moving right, forward, left, or backward
-                if (maze.isValidMove(x + 1, y)) {
-                    x += 1;
-                    facingDirection = "S";
-                    path += " R F";
-                } else if (maze.isValidMove(x, y + 1)) {
-                    y += 1;
-                    facingDirection = "E";
-                    path += "F";
-                } else if (maze.isValidMove(x - 1, y)) {
-                    x -= 1;
-                    facingDirection = "N";
-                    path += " L F";
-                } else if (maze.isValidMove(x, y - 1)) {
-                    y -= 1;
-                    facingDirection = "W";
-                    path += " RR F";
-                }
-            } else if (facingDirection.equals("S")) {
-                // Similar logic for South-facing direction
-                if (maze.isValidMove(x, y - 1)) {
-                    y -= 1;
-                    facingDirection = "W";
-                    path += " R F";
-                } else if (maze.isValidMove(x + 1, y)) {
-                    x += 1;
-                    facingDirection = "S";
-                    path += "F";
-                } else if (maze.isValidMove(x, y + 1)) {
-                    y += 1;
-                    facingDirection = "E";
-                    path += " L F";
-                } else if (maze.isValidMove(x - 1, y)) {
-                    x -= 1;
-                    facingDirection = "N";
-                    path += " RR F";
-                }
-            } else if (facingDirection.equals("W")) {
-                // Similar logic for West-facing direction
-                if (maze.isValidMove(x - 1, y)) {
-                    x -= 1;
-                    facingDirection = "N";
-                    path += " R F";
-                } else if (maze.isValidMove(x, y - 1)) {
-                    y -= 1;
-                    facingDirection = "W";
-                    path += "F";
-                } else if (maze.isValidMove(x + 1, y)) {
-                    x += 1;
-                    facingDirection = "S";
-                    path += " L F";
-                } else if (maze.isValidMove(x, y + 1)) {
-                    y += 1;
-                    facingDirection = "E";
-                    path += " RR F";
-                }
-            } else if (facingDirection.equals("N")) {
-                // Similar logic for North-facing direction
-                if (maze.isValidMove(x, y + 1)) {
-                    y += 1;
-                    facingDirection = "E";
-                    path += " R F";
-                } else if (maze.isValidMove(x - 1, y)) {
-                    x -= 1;
-                    facingDirection = "N";
-                    path += "F";
-                } else if (maze.isValidMove(x, y - 1)) {
-                    y -= 1;
-                    facingDirection = "W";
-                    path += " L F";
-                } else if (maze.isValidMove(x + 1, y)) {
-                    x += 1;
-                    facingDirection = "S";
-                    path += " RR F";
+        try {
+            
+            // Traverse the maze until the exit is found
+            while (maze.getValue(x, y) != 2) {
+                if (facingDirection.equals("E")) {
+                    // Try moving right, forward, left, or backward
+                    if (maze.isValidMove(x + 1, y)) {
+                        x += 1;
+                        facingDirection = "S";
+                        path += " R F";
+                    } else if (maze.isValidMove(x, y + 1)) {
+                        y += 1;
+                        facingDirection = "E";
+                        path += "F";
+                    } else if (maze.isValidMove(x - 1, y)) {
+                        x -= 1;
+                        facingDirection = "N";
+                        path += " L F";
+                    } else if (maze.isValidMove(x, y - 1)) {
+                        y -= 1;
+                        facingDirection = "W";
+                        path += " RR F";
+                    }
+                } else if (facingDirection.equals("S")) {
+                    // Similar logic for South-facing direction
+                    if (maze.isValidMove(x, y - 1)) {
+                        y -= 1;
+                        facingDirection = "W";
+                        path += " R F";
+                    } else if (maze.isValidMove(x + 1, y)) {
+                        x += 1;
+                        facingDirection = "S";
+                        path += "F";
+                    } else if (maze.isValidMove(x, y + 1)) {
+                        y += 1;
+                        facingDirection = "E";
+                        path += " L F";
+                    } else if (maze.isValidMove(x - 1, y)) {
+                        x -= 1;
+                        facingDirection = "N";
+                        path += " RR F";
+                    }
+                } else if (facingDirection.equals("W")) {
+                    // Similar logic for West-facing direction
+                    if (maze.isValidMove(x - 1, y)) {
+                        x -= 1;
+                        facingDirection = "N";
+                        path += " R F";
+                    } else if (maze.isValidMove(x, y - 1)) {
+                        y -= 1;
+                        facingDirection = "W";
+                        path += "F";
+                    } else if (maze.isValidMove(x + 1, y)) {
+                        x += 1;
+                        facingDirection = "S";
+                        path += " L F";
+                    } else if (maze.isValidMove(x, y + 1)) {
+                        y += 1;
+                        facingDirection = "E";
+                        path += " RR F";
+                    }
+                } else if (facingDirection.equals("N")) {
+                    // Similar logic for North-facing direction
+                    if (maze.isValidMove(x, y + 1)) {
+                        y += 1;
+                        facingDirection = "E";
+                        path += " R F";
+                    } else if (maze.isValidMove(x - 1, y)) {
+                        x -= 1;
+                        facingDirection = "N";
+                        path += "F";
+                    } else if (maze.isValidMove(x, y - 1)) {
+                        y -= 1;
+                        facingDirection = "W";
+                        path += " L F";
+                    } else if (maze.isValidMove(x + 1, y)) {
+                        x += 1;
+                        facingDirection = "S";
+                        path += " RR F";
+                    }
                 }
             }
+
+            return path + " ";
+
+        } catch (Exception e) {
+            return "";
         }
 
-        return path + " ";
     }
 
 }
