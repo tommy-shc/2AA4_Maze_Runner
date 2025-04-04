@@ -1,5 +1,8 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class MazeVerifier{
 
     private Maze maze;
@@ -11,9 +14,10 @@ public class MazeVerifier{
         String[] components = path.split(" ");
         int count;
         String move;
-        String currentDir = "E"; // Start facing East
-        int currentX = maze.getWestEntrance();
-        int currentY = 0;
+
+        Position pos = new Position(maze.getWestEntrance(),0,'E');
+
+        Queue<MoveCommand> moveQueue = new LinkedList<>();
 
         try {
 
@@ -33,42 +37,28 @@ public class MazeVerifier{
                     move = component;
                 }
 
-                // Convert a left move to three right moves (simplifies logic)
-                if (move.equals("L")) {
-                    count = 3;
-                    move = "R";
-                }
-
                 // Execute the move 'count' times
                 for (int i = 0; i < count; i++) {
-                    if (move.equals("F")) {
-                        // Move forward based on current direction
-                        if (currentDir.equals("E")) {
-                            currentY += 1;
-                        } else if (currentDir.equals("S")) {
-                            currentX += 1;
-                        } else if (currentDir.equals("W")) {
-                            currentY -= 1;
-                        } else if (currentDir.equals("N")) {
-                            currentX -= 1;
-                        }
+                    if (move.equals("F")) {            
+                        moveQueue.add(new MoveForwardCommand());
+
+                    } else if (move.equals("L")){
+                        // Change direction (left turn)
+                        moveQueue.add(new TurnLeftCommand());
+                    
                     } else {
                         // Change direction (right turn)
-                        if (currentDir.equals("E")) {
-                            currentDir = "S";
-                        } else if (currentDir.equals("S")) {
-                            currentDir = "W";
-                        } else if (currentDir.equals("W")) {
-                            currentDir = "N";
-                        } else if (currentDir.equals("N")) {
-                            currentDir = "E";
-                        }
+                        moveQueue.add(new TurnRightCommand());
                     }
                 }
             }
 
+            while(!moveQueue.isEmpty()){
+                moveQueue.remove().execute(pos);
+            }
+
             // Check if the final position is the exit
-            if (maze.getValue(currentX, currentY) == 2) {
+            if (maze.getValue(pos.getX(), pos.getY()) == 2) {
                 return true;
             }
 
