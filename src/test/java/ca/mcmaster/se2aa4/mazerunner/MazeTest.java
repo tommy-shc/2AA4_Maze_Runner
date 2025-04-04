@@ -40,5 +40,11 @@ public class MazeTest {
 
     }
 
+    @Test
+    void getWestEntranceTest(){
+
+        assertEquals(5,maze.getWestEntrance());
+
+    }
 
 }

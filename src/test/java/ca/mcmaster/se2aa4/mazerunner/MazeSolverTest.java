@@ -16,7 +16,7 @@ class MazeSolverTest {
     };
     
 
-    Maze maze = new Maze(tempMaze,6, 7);
+    Maze maze = new Maze(tempMaze,7, 7);
 
     @Test
     void basicFactorizedPathTest() {

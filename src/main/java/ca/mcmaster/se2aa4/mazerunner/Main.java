@@ -112,6 +112,15 @@ public class Main {
                     }
                 }
 
+                for(int i=0;i<numOfRows;i++){
+                    for(int j=0;j<numOfColumns;j++){
+                        System.out.print(tempMaze[i][j]);
+                    }
+                    System.out.println();
+                }
+
+                System.out.println(numOfRows);
+                System.out.println(numOfColumns);
                 maze = new Maze(tempMaze,numOfRows, numOfColumns);
                 maze.displayMaze();
 
