@@ -9,7 +9,7 @@ public class Maze {
     private int westEntrance = 0;
 
     // Constructor to initialize the maze with given dimensions
-    Maze(int[][] tempMaze,int row, int column) {
+    public Maze(int[][] tempMaze,int row, int column) {
         this.maze = new int[row][column];
 
         for(int i=0;i<row;i++){
@@ -19,6 +19,7 @@ public class Maze {
         }
         this.numOfRows = row;
         this.numOfColumns = column;
+        System.out.println("Reached here");
         markWestEntrance();
     }
 
@@ -38,6 +39,8 @@ public class Maze {
         // Find the entry point on the West side of the maze
         for (int i = 0; i < this.numOfRows; i++) {
             if (maze[i][0] == 2) {
+                System.out.println("Reached here 2");
+
                 westEntrance = i;
                 maze[i][0] = 0; // Mark entry point as visited
                 return;

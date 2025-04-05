@@ -26,7 +26,6 @@ public class Main {
         options.addOption("p", "input", true, "Path to solve the maze");
 
         CommandLineParser parser = new DefaultParser();
-        Maze maze;
 
         try {
             // Default maze file path
@@ -112,17 +111,21 @@ public class Main {
                     }
                 }
 
-                for(int i=0;i<numOfRows;i++){
-                    for(int j=0;j<numOfColumns;j++){
-                        System.out.print(tempMaze[i][j]);
-                    }
-                    System.out.println();
-                }
+                // for(int i=0;i<numOfRows;i++){
+                //     for(int j=0;j<numOfColumns;j++){
+                //         System.out.print(tempMaze[i][j]);
+                //     }
+                //     System.out.println();
+                // }
 
-                System.out.println(numOfRows);
-                System.out.println(numOfColumns);
-                maze = new Maze(tempMaze,numOfRows, numOfColumns);
-                maze.displayMaze();
+                //System.out.println(numOfRows);
+                //System.out.println(numOfColumns);
+
+                //maze = new Maze(tempMaze,numOfRows, numOfColumns);
+                Maze mazeTemp = MazeFactory.createFromArray(tempMaze);
+                //mazeTemp.displayMaze();
+                //mazeTemp.getWestEntrance();
+                //maze.displayMaze();
 
                 logger.info("**** Displaying Path");
                 //maze.displayMaze();
@@ -130,13 +133,13 @@ public class Main {
                 // Handle path computation or verification based on command-line options
                 if (!cmd.hasOption("p")) {
                     logger.trace("**** Computing path");
-                    MazeSolver mazeSolver = new MazeSolver(maze);
+                    MazeSolver mazeSolver = new MazeSolver(mazeTemp);
                     String path = mazeSolver.findPathRHR(); // Compute path using Right-Hand Rule
                     System.out.println(path); //Display unfoactorized path
                     System.out.println(mazeSolver.getFactorizedForm(path)); // Display factorized path
                 } else {
                     logger.trace("**** Verifying Path");
-                    MazeVerifier mazeVerifer = new MazeVerifier(maze);
+                    MazeVerifier mazeVerifer = new MazeVerifier(mazeTemp);
                     if (mazeVerifer.verifyPath(cmd.getOptionValue("p"))) {
                         System.out.println("correct path");
                     } else {
